@@ -1,0 +1,118 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+body {
+    background-color: #f0f2f5;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    /* Adiciona uma transição suave para a mudança de cor de fundo */
+    transition: background-color 0.3s ease;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px; /* Limita a largura para parecer um app mobile no PC */
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+input {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px; /* Tamanho de fonte padrão para evitar zoom no iOS */
+}
+
+/* Garante que o input não receba zoom automático no iOS em telas menores */
+@media screen and (max-width: 768px) {
+    input {
+        font-size: 16px;
+    }
+}
+
+button {
+    padding: 12px 20px;
+    background-color: #ef5350;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #d32f2f;
+}
+
+.card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    /* Transição suave para a cor de fundo do card */
+    transition: background-color 0.3s ease;
+}
+
+.card img {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 10px;
+}
+
+#pokeName {
+    text-transform: uppercase;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.types {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.types span {
+    padding: 5px 12px;
+    background-color: #eee;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+#pokeInfo {
+    color: #666;
+    font-size: 14px;
+}
+
+.hidden { display: none; }
+
+.error {
+    color: #d32f2f;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+}
