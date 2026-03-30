@@ -1,31 +1,434 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PokeSearch Mobile</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#080808"/>
+<meta name="description" content="Catalogo premium de supercarros das marcas mais exclusivas do mundo."/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<title>RedLine Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#080808;--bg2:#111;--bg3:#1a1a1a;--surface:#161616;--surface2:#222;--border:rgba(255,255,255,.07);--text:#f0ece4;--text2:#a09a90;--text3:#5a5650;--accent:#c8a96e;--accent2:#e8c98e;--radius:16px;--radius-sm:10px;--header-h:60px;--safe-top:env(safe-area-inset-top,0px);--safe-bottom:env(safe-area-inset-bottom,0px);--fd:'Bebas Neue',sans-serif;--fb:'DM Sans',sans-serif;--fm:'DM Mono',monospace;--ease:cubic-bezier(.23,1,.32,1);--easeback:cubic-bezier(.34,1.56,.64,1)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--fb);min-height:100dvh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}button{cursor:pointer;border:none;background:none;font-family:inherit}input{font-family:inherit}
+#splash{position:fixed;inset:0;z-index:9999;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .5s var(--ease),transform .5s var(--ease)}
+#splash.out{opacity:0;transform:scale(1.05);pointer-events:none}
+.slogo{display:flex;align-items:center;gap:12px}
+.sicon{color:var(--accent);font-size:44px;animation:spin .7s var(--easeback) both}
+.sname{font-family:var(--fd);font-size:58px;letter-spacing:.12em}
+.sbar{width:150px;height:2px;background:var(--border);border-radius:2px;overflow:hidden}
+.sfill{height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--accent2));animation:load 1.2s var(--ease) .3s forwards}
+@keyframes spin{from{opacity:0;transform:rotate(-180deg) scale(.5)}to{opacity:1;transform:none}}
+@keyframes load{to{width:100%}}
+#app{min-height:100dvh}
+#header{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--header-h);padding-top:var(--safe-top);background:rgba(8,8,8,.88);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border);transition:transform .3s var(--ease)}
+#header.hide{transform:translateY(-100%)}
+.hinner{max-width:500px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;justify-content:space-between}
+.logo{display:flex;align-items:center;gap:8px}.logo-i{color:var(--accent);font-size:18px}.logo-n{font-family:var(--fd);font-size:26px;letter-spacing:.14em}
+.hnav{display:flex;gap:4px}.nbtn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:color .2s,background .2s}.nbtn.active,.nbtn:hover{color:var(--accent);background:rgba(200,169,110,.1)}
+.view{display:none;padding-top:var(--header-h)}.view.active{display:block}
+.hero{position:relative;height:min(68vw,320px);overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=900&q=80&auto=format') center/cover no-repeat;animation:pan 12s ease-in-out infinite alternate}
+@keyframes pan{from{transform:scale(1.08) translateX(-2%)}to{transform:scale(1.05) translateX(2%)}}
+.hero-ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(8,8,8,.98) 0%,rgba(8,8,8,.45) 55%,rgba(8,8,8,.15) 100%)}
+.hero-c{position:relative;z-index:2;padding:0 22px 18px;animation:fadeup .7s var(--ease) .1s both}
+.hero-ey{font-family:var(--fm);font-size:10px;letter-spacing:.2em;color:var(--accent);text-transform:uppercase;margin-bottom:6px}
+.hero-t{font-family:var(--fd);font-size:clamp(40px,11vw,62px);line-height:.95;letter-spacing:.02em}
+.hero-t em{color:var(--accent);font-style:normal}.hero-s{margin-top:8px;font-size:13px;color:var(--text2)}
+.sec-lbl{padding:0 20px 8px;font-family:var(--fm);font-size:10px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase}
+.brands-sec{padding:18px 0 4px}.brands-row{display:flex;gap:10px;padding:0 20px;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}.brands-row::-webkit-scrollbar{display:none}
+.bchip{flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 14px;border-radius:var(--radius);min-width:74px;background:var(--surface);border:1px solid var(--border);cursor:pointer;transition:all .25s var(--ease)}
+.bchip.active{border-color:var(--accent);background:rgba(200,169,110,.08)}.bchip-em{font-size:20px;line-height:1}.bchip-nm{font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);transition:color .2s}.bchip.active .bchip-nm{color:var(--accent)}
+.search-sec{padding:14px 20px 6px}.search-wrap{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);display:flex;align-items:center;transition:border-color .2s,box-shadow .2s}.search-wrap:focus-within{border-color:rgba(200,169,110,.5);box-shadow:0 0 0 3px rgba(200,169,110,.08)}
+.s-icon{position:absolute;left:14px;color:var(--text3);pointer-events:none}.s-input{width:100%;padding:13px 40px 13px 42px;background:none;border:none;outline:none;font-size:15px;color:var(--text)}.s-input::placeholder{color:var(--text3)}
+.s-clr{position:absolute;right:12px;width:24px;height:24px;display:flex;align-items:center;justify-content:center;color:var(--text3);font-size:12px;background:var(--bg3);border-radius:50%;cursor:pointer;opacity:0;transition:opacity .2s}.s-clr.show{opacity:1}
+.sanim{display:flex;gap:5px;justify-content:center;align-items:center;height:0;overflow:hidden;transition:height .3s var(--ease)}.sanim.on{height:28px}
+.sanim span{width:4px;height:4px;background:var(--accent);border-radius:50%;animation:pulse .8s ease-in-out infinite}
+.sanim span:nth-child(2){animation-delay:.1s}.sanim span:nth-child(3){animation-delay:.2s}.sanim span:nth-child(4){animation-delay:.3s}.sanim span:nth-child(5){animation-delay:.4s}
+@keyframes pulse{0%,100%{transform:scaleY(1);opacity:.3}50%{transform:scaleY(2.5);opacity:1}}
+.cars-sec{padding:10px 20px 100px}.cars-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.car-card{border-radius:var(--radius);background:var(--surface);border:1px solid var(--border);overflow:hidden;cursor:pointer;position:relative;transition:transform .3s var(--ease),box-shadow .3s var(--ease);animation:cardin .5s var(--easeback) both}
+.car-card:active{transform:scale(.97)}.car-card.feat{grid-column:1/-1}
+@keyframes cardin{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+.cc-img{width:100%;aspect-ratio:16/9;object-fit:cover;background:var(--bg3);transition:transform .5s var(--ease)}.car-card:hover .cc-img{transform:scale(1.04)}.car-card.feat .cc-img{aspect-ratio:16/8}
+.cc-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);border-radius:6px;padding:3px 7px;font-size:9px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border:1px solid rgba(200,169,110,.25)}
+.cc-body{padding:9px 11px 11px}.cc-brand{font-size:10px;color:var(--text3);letter-spacing:.1em;text-transform:uppercase;font-weight:500}.cc-name{font-size:14px;font-weight:500;color:var(--text);margin-top:2px;line-height:1.2}.car-card.feat .cc-name{font-size:17px}
+.cc-spec{margin-top:7px;display:flex;gap:7px}.spill{font-family:var(--fm);font-size:9px;color:var(--text3);background:var(--bg3);border-radius:4px;padding:3px 6px}.spill b{color:var(--accent);font-weight:500}
+.empty{text-align:center;padding:60px 20px;color:var(--text3);display:none}.empty.show{display:block}.empty-i{font-size:48px;margin-bottom:12px}
+.modal{position:fixed;inset:0;z-index:200;pointer-events:none}.modal.open{pointer-events:all}
+.mbdrop{position:absolute;inset:0;background:rgba(0,0,0,.7);opacity:0;transition:opacity .35s var(--ease);backdrop-filter:blur(4px)}.modal.open .mbdrop{opacity:1}
+.msheet{position:absolute;left:0;right:0;bottom:0;max-height:90dvh;background:var(--bg2);border-radius:24px 24px 0 0;overflow-y:auto;transform:translateY(100%);transition:transform .45s var(--ease);scrollbar-width:none}.msheet::-webkit-scrollbar{display:none}.modal.open .msheet{transform:translateY(0)}
+.mhandle{width:40px;height:4px;background:var(--surface2);border-radius:2px;margin:12px auto 0}
+.mclose{position:absolute;top:16px;right:16px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.5);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;color:var(--text2);transition:background .2s,color .2s}.mclose:hover{background:rgba(255,255,255,.1);color:var(--text)}
+.mimg-wrap{position:relative;overflow:hidden}.mimg{width:100%;aspect-ratio:16/9;object-fit:cover}.mimg-g{position:absolute;inset:0;background:linear-gradient(to top,var(--bg2) 0%,transparent 60%)}
+.mbbadge{position:absolute;bottom:16px;left:16px;font-family:var(--fd);font-size:28px;letter-spacing:.1em;color:rgba(255,255,255,.12);text-transform:uppercase}
+.mbody{padding:0 20px 40px}.mmeta{display:flex;gap:10px;align-items:center;margin-bottom:6px}.myear,.morig{font-family:var(--fm);font-size:11px;color:var(--text3);letter-spacing:.1em}.myear::after{content:" - ";margin:0 2px}
+.mname{font-family:var(--fd);font-size:clamp(30px,9vw,46px);line-height:.95;letter-spacing:.02em;color:var(--text);margin-bottom:12px}
+.mdesc{font-size:14px;line-height:1.7;color:var(--text2);margin-bottom:18px}
+.mspecs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px}
+.scard{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px}
+.scard-l{font-family:var(--fm);font-size:9px;color:var(--text3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:3px}
+.scard-v{font-size:17px;font-weight:600;color:var(--text);line-height:1}
+.mtags{display:flex;flex-wrap:wrap;gap:6px}.tag{background:var(--surface2);border-radius:6px;padding:5px 10px;font-size:11px;color:var(--text2);border:1px solid var(--border)}
+#view-camera{display:none;flex-direction:column;align-items:center;padding:calc(var(--header-h) + 24px) 20px 40px;min-height:100dvh}
+#view-camera.active{display:flex}
+.cam-hdr{text-align:center;margin-bottom:20px}.cam-hdr h2{font-family:var(--fd);font-size:34px;letter-spacing:.1em}.cam-hdr p{font-size:13px;color:var(--text2);margin-top:4px}
+.cam-frame{position:relative;width:100%;max-width:400px;border-radius:20px;overflow:hidden;background:#050505;aspect-ratio:4/3;border:1px solid var(--border)}
+#camVideo{width:100%;height:100%;object-fit:cover}#camPhoto{width:100%;height:100%;object-fit:cover;display:none}
+.cam-ov{position:absolute;inset:0;pointer-events:none}
+.cc2{position:absolute;width:24px;height:24px;border-color:var(--accent);border-style:solid;border-width:0}
+.cc2.tl{top:12px;left:12px;border-top-width:2px;border-left-width:2px;border-radius:4px 0 0 0}.cc2.tr{top:12px;right:12px;border-top-width:2px;border-right-width:2px;border-radius:0 4px 0 0}.cc2.bl{bottom:12px;left:12px;border-bottom-width:2px;border-left-width:2px;border-radius:0 0 0 4px}.cc2.br{bottom:12px;right:12px;border-bottom-width:2px;border-right-width:2px;border-radius:0 0 4px 0}
+.cam-btns{display:flex;gap:20px;align-items:center;justify-content:center;margin-top:20px}
+.cbtn{border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .2s var(--easeback)}.cbtn:active{transform:scale(.92)}
+.cbtn.sec{width:50px;height:50px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}.cbtn.pri{width:72px;height:72px;background:var(--accent);box-shadow:0 0 0 4px rgba(200,169,110,.2)}
+.shring{width:52px;height:52px;border-radius:50%;border:2px solid rgba(255,255,255,.5);display:flex;align-items:center;justify-content:center}.shdot{width:40px;height:40px;border-radius:50%;background:#fff}
+.cam-st{font-family:var(--fm);font-size:11px;color:var(--text3);letter-spacing:.1em;text-align:center;margin-top:12px}
+.toast{position:fixed;bottom:calc(20px + var(--safe-bottom));left:50%;z-index:300;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 20px;font-size:14px;color:var(--text);box-shadow:0 8px 32px rgba(0,0,0,.5);opacity:0;pointer-events:none;white-space:nowrap;max-width:calc(100vw - 40px);transition:opacity .3s var(--ease),transform .3s var(--ease)}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@keyframes fadeup{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>PokeSearch</h1>
-            <div class="search-box">
-                <input type="text" id="pokemonInput" placeholder="Ex: Pikachu ou 25">
-                <button id="searchBtn">Buscar</button>
-            </div>
-        </header>
-
-        <main id="app">
-            <div id="card" class="card hidden">
-                <img src="" alt="Pokemon" id="pokeImage">
-                <h2 id="pokeName"></h2>
-                <div class="types" id="pokeTypes"></div>
-                <p id="pokeInfo"></p>
-            </div>
-            <p id="error" class="error hidden">Pokémon não encontrado. Tente novamente!</p>
-        </main>
+<div id="splash">
+  <div class="slogo"><span class="sicon">&#9650;</span><span class="sname">RedLine Hub</span></div>
+  <div class="sbar"><div class="sfill"></div></div>
+</div>
+<div id="app">
+  <header id="header">
+    <div class="hinner">
+      <div class="logo"><span class="logo-i">&#9650;</span><span class="logo-n">RedLine Hub</span></div>
+      <nav class="hnav">
+        <button class="nbtn active" data-view="catalog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        </button>
+        <button class="nbtn" data-view="camera">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </button>
+      </nav>
     </div>
-    <script src="script.js"></script>
+  </header>
+  <main id="view-catalog" class="view active">
+    <section class="hero"><div class="hero-bg"></div><div class="hero-ov"></div>
+      <div class="hero-c"><p class="hero-ey">Velocidade. Precisao. Arte.</p><h1 class="hero-t">SUPERCARROS<br/><em>do Mundo</em></h1><p class="hero-s">As maquinas mais extraordinarias ja construidas.</p></div>
+    </section>
+    <section class="brands-sec"><div class="sec-lbl">Marcas</div><div class="brands-row" id="brandsRow"></div></section>
+    <section class="search-sec">
+      <div class="search-wrap">
+        <svg class="s-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" id="sInput" class="s-input" placeholder="Buscar modelo..." autocomplete="off"/>
+        <div class="s-clr" id="sClr" role="button" tabindex="0">x</div>
+      </div>
+      <div class="sanim" id="sanim"><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+    <section class="cars-sec"><div class="sec-lbl" id="carsLbl">Todos os Modelos</div><div class="cars-grid" id="carsGrid"></div><div class="empty" id="empty"><div class="empty-i">&#127950;</div><p>Nenhum modelo encontrado</p></div></section>
+  </main>
+  <main id="view-camera" class="view">
+    <div class="cam-hdr"><h2>Camera</h2><p>Registre seu supercarro favorito</p></div>
+    <div class="cam-frame">
+      <video id="camVideo" autoplay playsinline muted></video>
+      <img id="camPhoto" alt="Foto"/>
+      <div class="cam-ov"><div class="cc2 tl"></div><div class="cc2 tr"></div><div class="cc2 bl"></div><div class="cc2 br"></div></div>
+    </div>
+    <canvas id="camCanvas" style="display:none"></canvas>
+    <div class="cam-btns">
+      <button class="cbtn sec" id="btnFlip"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 4v6h6M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg></button>
+      <button class="cbtn pri" id="btnCapture"><div class="shring"><div class="shdot"></div></div></button>
+      <button class="cbtn sec" id="btnRetake" style="display:none"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></button>
+    </div>
+    <div class="cam-st" id="camSt">Toque no icone de camera para iniciar</div>
+  </main>
+  <div id="modal" class="modal">
+    <div class="mbdrop" id="mbdrop"></div>
+    <div class="msheet" id="msheet">
+      <div class="mhandle"></div>
+      <button class="mclose" id="mclose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <div class="mimg-wrap"><img id="mimg" class="mimg" src="" alt=""/><div class="mimg-g"></div><div class="mbbadge" id="mbbadge"></div></div>
+      <div class="mbody"><div class="mmeta"><span class="myear" id="myear"></span><span class="morig" id="morig"></span></div><h2 class="mname" id="mname"></h2><p class="mdesc" id="mdesc"></p><div class="mspecs" id="mspecs"></div><div class="mtags" id="mtags"></div></div>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+</div>
+<script>
+
+var BRANDS=[
+  {id:'all',name:'Todos',em:'&#127950;'},
+  {id:'ferrari',name:'Ferrari',em:'&#128052;'},
+  {id:'lamborghini',name:'Lamborghini',em:'&#128002;'},
+  {id:'porsche',name:'Porsche',em:'&#128014;'},
+  {id:'mclaren',name:'McLaren',em:'&#128310;'},
+  {id:'bugatti',name:'Bugatti',em:'&#128024;'},
+  {id:'astonmartin',name:'Aston Martin',em:'&#129419;'},
+  {id:'maserati',name:'Maserati',em:'&#128306;'},
+  {id:'koenigsegg',name:'Koenigsegg',em:'&#128081;'}
+];
+var CARS=[
+  {id:1,brand:'ferrari',feat:true,name:'Ferrari SF90 Stradale',year:2024,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1583121274602-3e2820c69888?w=800&q=80&auto=format',
+   desc:'O SF90 Stradale e o primeiro hibrido plug-in de producao da Ferrari. V8 biturbo 4.0L + 3 motores eletricos = 1000 cv. Performance instantanea com torque eletrico disponivel a qualquer rotacao.',
+   specs:{'Potencia':'1000 cv','Top Speed':'340 km/h','0-100':'2.5 s','Motor':'V8 4.0L Hibrido'},
+   tags:['Hibrido','Superesportivo','Mid-engine','AWD']},
+  {id:2,brand:'ferrari',name:'Ferrari 296 GTB',year:2023,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=800&q=80&auto=format',
+   desc:'O 296 GTB marca o retorno do V6 a Ferrari. Biturbo 120 graus + motor eletrico = 830 cv. O design arrojado e a leveza estrutural fazem dele um marco tecnologico da marca.',
+   specs:{'Potencia':'830 cv','Top Speed':'330 km/h','0-100':'2.9 s','Motor':'V6 3.0L Hibrido'},
+   tags:['Hibrido','V6','Berlineta','F1-derived']},
+  {id:3,brand:'ferrari',name:'Ferrari Daytona SP3',year:2023,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1553440569-bcc63803a83d?w=800&q=80&auto=format',
+   desc:'Serie Icona, homenagem as vitorias de Le Mans 1967-1969. V12 NA de 840 cv, fibra de carbono e targa roof. Apenas 599 unidades, esgotadas antes do lancamento.',
+   specs:{'Potencia':'840 cv','Top Speed':'340 km/h','0-100':'2.85 s','Motor':'V12 6.5L NA'},
+   tags:['Icona','V12','Limitado','NA']},
+  {id:4,brand:'lamborghini',feat:true,name:'Lamborghini Revuelto',year:2024,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1490398927894-99f08e15a3a1?w=800&q=80&auto=format',
+   desc:'Substitui o Aventador como carro-chefe da Lamborghini. Primeiro V12 hibrido da marca: motor 6.5L aspirado + 3 motores eletricos = 1015 cv. Som inconfundivel, performance do futuro.',
+   specs:{'Potencia':'1015 cv','Top Speed':'350 km/h','0-100':'2.5 s','Motor':'V12 6.5L Hibrido'},
+   tags:['Hibrido','V12','PHEV','AWD']},
+  {id:5,brand:'lamborghini',name:'Lamborghini Huracan STO',year:2023,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1542362567-b07e54358753?w=800&q=80&auto=format',
+   desc:'STO = Super Trofeo Omologata. 70% das pecas aerodinamicas vem de carros de corrida GT3. V10 aspirado de 640 cv gritando ate 8.000 rpm com sonoridade unica.',
+   specs:{'Potencia':'640 cv','Top Speed':'310 km/h','0-100':'3.0 s','Motor':'V10 5.2L NA'},
+   tags:['Track','V10','RWD','Aero ativa']},
+  {id:6,brand:'porsche',feat:true,name:'Porsche 911 GT3 RS',year:2024,origin:'Alemanha',
+   img:'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?w=800&q=80&auto=format',
+   desc:'O 911 mais extremo, desenvolvido pelo departamento de motorsport. Flat-six 4.0L a 9.000 rpm, 525 cv. Sistema de aerodinamica ativa com DRS — inedito num 911.',
+   specs:{'Potencia':'525 cv','Top Speed':'296 km/h','0-100':'3.2 s','Motor':'Flat-6 4.0L NA'},
+   tags:['Track','Flat-6','DRS','NA']},
+  {id:7,brand:'porsche',name:'Porsche 918 Spyder',year:2015,origin:'Alemanha',
+   img:'https://images.unsplash.com/photo-1580274455191-1c62238fa333?w=800&q=80&auto=format',
+   desc:'Provou que eletrificacao amplifica a experiencia esportiva. V8 608 cv + 2 motores eletricos = 887 cv. Quebrou o recorde de Nurburgring para carros de producao em 2013.',
+   specs:{'Potencia':'887 cv','Top Speed':'340 km/h','0-100':'2.6 s','Motor':'V8 4.6L Hibrido'},
+   tags:['PHEV','Mitico','AWD','Nurburgring']},
+  {id:8,brand:'mclaren',feat:true,name:'McLaren P1',year:2015,origin:'Reino Unido',
+   img:'https://images.unsplash.com/photo-1520031441872-265e4ff70366?w=800&q=80&auto=format',
+   desc:'O carro de producao mais rapido em pista. V8 twin-turbo + motor eletrico = 916 cv. Tecnologia direta de F1: DRS, aerodinamica ativa, pneus Pirelli P Zero corsa especiais.',
+   specs:{'Potencia':'916 cv','Top Speed':'350 km/h','0-100':'2.8 s','Motor':'V8 3.8L Hibrido'},
+   tags:['Mitico','PHEV','DRS','F1-tech']},
+  {id:9,brand:'mclaren',name:'McLaren 750S',year:2024,origin:'Reino Unido',
+   img:'https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=800&q=80&auto=format',
+   desc:'Evolucao do aclamado 720S: 740 cv, 28 kg mais leve, 60% de novos componentes. Direcao cirurgica e 0-100 em 2.8 s. Estado da arte McLaren para uso diario.',
+   specs:{'Potencia':'740 cv','Top Speed':'331 km/h','0-100':'2.8 s','Motor':'V8 4.0L'},
+   tags:['Superesportivo','V8','RWD','Carbon']},
+  {id:10,brand:'bugatti',feat:true,name:'Bugatti Chiron Super Sport',year:2024,origin:'Franca',
+   img:'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=800&q=80&auto=format',
+   desc:'Apice absoluto da engenharia automotiva. Motor W16 8.0L com 4 turbos, 1600 cv. Cada unidade leva mais de 6 meses para ser construida artesanalmente em Molsheim.',
+   specs:{'Potencia':'1600 cv','Top Speed':'440 km/h','0-100':'2.4 s','Motor':'W16 8.0L'},
+   tags:['Hipercarro','W16','AWD','Artesanal']},
+  {id:11,brand:'bugatti',name:'Bugatti Bolide',year:2024,origin:'Franca',
+   img:'https://images.unsplash.com/photo-1606016159991-dfe4f2746ad5?w=800&q=80&auto=format',
+   desc:'Carro de pista definitivo da Bugatti. W16 de 1850 cv em chassi de 1240 kg. Downforce extremo — teoricamente suficiente para andar de cabeca para baixo.',
+   specs:{'Potencia':'1850 cv','Top Speed':'500 km/h','0-100':'2.17 s','Motor':'W16 8.0L'},
+   tags:['Track only','W16','Downforce','Raro']},
+  {id:12,brand:'astonmartin',feat:true,name:'Aston Martin Valkyrie',year:2023,origin:'Reino Unido',
+   img:'https://images.unsplash.com/photo-1569171540038-04f78c6f7eb2?w=800&q=80&auto=format',
+   desc:'Desenvolvido com Red Bull Racing e Adrian Newey. V12 Cosworth a 11.100 rpm + hibrido = 1160 cv em menos de 1000 kg. Filosofia genuina de F1 num carro de estrada.',
+   specs:{'Potencia':'1160 cv','Top Speed':'402 km/h','0-100':'2.5 s','Motor':'V12 6.5L Hibrido'},
+   tags:['F1-derived','Newey','Hibrido','V12']},
+  {id:13,brand:'astonmartin',name:'Aston Martin DB12',year:2024,origin:'Reino Unido',
+   img:'https://images.unsplash.com/photo-1555215695-3004980ad54e?w=800&q=80&auto=format',
+   desc:'O Super Tourer britanico redefinido para a era moderna. Motor V8 AMG de 680 cv, luxo artesanal e elegancia intemporal. O Grand Tourer que Bond escolheria hoje.',
+   specs:{'Potencia':'680 cv','Top Speed':'325 km/h','0-100':'3.5 s','Motor':'V8 4.0L'},
+   tags:['Grand Tourer','British','Luxo','V8']},
+  {id:14,brand:'maserati',feat:true,name:'Maserati MC20',year:2024,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80&auto=format',
+   desc:'Retorno grandioso da Maserati aos superesportivos. Motor Nettuno V6 com prechamber combustion da F1, chassi em fibra de carbono, portas borboleta. 630 cv italianos puros.',
+   specs:{'Potencia':'630 cv','Top Speed':'325 km/h','0-100':'2.9 s','Motor':'V6 3.0L Nettuno'},
+   tags:['F1-tech','Carbon','Butterfly doors','Mid-engine']},
+  {id:15,brand:'maserati',name:'Maserati GranTurismo Folgore',year:2024,origin:'Italia',
+   img:'https://images.unsplash.com/photo-1527922645878-1e8e25c60f43?w=800&q=80&auto=format',
+   desc:'Primeiro eletrico de producao da Maserati. Tres motores eletricos, 761 cv, 0-100 em 2.7 s. Grand Tourer eletrico mais rapido do mundo com mais de 400 km de autonomia.',
+   specs:{'Potencia':'761 cv','Top Speed':'325 km/h','0-100':'2.7 s','Motor':'Eletrico 3x'},
+   tags:['EV','Grand Tourer','Italiano','Luxo']},
+  {id:16,brand:'koenigsegg',feat:true,name:'Koenigsegg Jesko Absolut',year:2024,origin:'Suecia',
+   img:'https://images.unsplash.com/photo-1517026575980-3e1e2dedeab4?w=800&q=80&auto=format',
+   desc:'Construido para ser o mais rapido da historia. V8 5.0L biturbo 1600 cv, transmissao LST com 9 embreagens, aerodinamica de minima resistencia. Velocidade teorica: 530+ km/h.',
+   specs:{'Potencia':'1600 cv','Top Speed':'531 km/h','0-100':'2.5 s','Motor':'V8 5.0L BiTurbo'},
+   tags:['Record','V8','LST','Suecia']},
+  {id:17,brand:'koenigsegg',name:'Koenigsegg Gemera',year:2024,origin:'Suecia',
+   img:'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80&auto=format',
+   desc:'O Mega-GT da Koenigsegg: 4 lugares, 4 portas butterfly, 2300 cv. Motor TFG 2.0L 3 cilindros + 3 motores eletricos. 0-100 em 1.9 s com 4 passageiros a bordo.',
+   specs:{'Potencia':'2300 cv','Top Speed':'400 km/h','0-100':'1.9 s','Motor':'TFG 2.0L Hibrido'},
+   tags:['4 lugares','Hibrido','Mega-GT','Record']}
+];
+
+var S={brand:'all',query:'',car:null,stream:null,facing:'environment'};
+var toastTmr;
+
+function g(id){return document.getElementById(id);}
+
+function showToast(msg,ms){
+  ms=ms||2500;
+  var t=g('toast');t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTmr);toastTmr=setTimeout(function(){t.classList.remove('show');},ms);
+}
+
+function renderBrands(){
+  g('brandsRow').innerHTML=BRANDS.map(function(b){
+    return '<button class="bchip'+(S.brand===b.id?' active':'')+'" data-b="'+b.id+'">'+
+      '<span class="bchip-em">'+b.em+'</span>'+
+      '<span class="bchip-nm">'+b.name+'</span></button>';
+  }).join('');
+  g('brandsRow').querySelectorAll('.bchip').forEach(function(btn){
+    btn.addEventListener('click',function(){
+      S.brand=btn.dataset.b;S.query='';
+      g('sInput').value='';g('sClr').classList.remove('show');
+      renderBrands();renderCars();
+    });
+  });
+}
+
+function renderCars(){
+  var cars=CARS.filter(function(c){
+    var bOk=S.brand==='all'||c.brand===S.brand;
+    var q=S.query.toLowerCase();
+    var qOk=!q||c.name.toLowerCase().indexOf(q)>=0||c.brand.toLowerCase().indexOf(q)>=0;
+    return bOk&&qOk;
+  });
+  var b=BRANDS.filter(function(x){return x.id===S.brand;})[0];
+  var lbl=(b&&b.name!=='Todos'?b.name:'Todos os Modelos')+' - '+cars.length+' modelo'+(cars.length!==1?'s':'');
+  g('carsLbl').textContent=lbl;
+  if(!cars.length){g('carsGrid').innerHTML='';g('empty').classList.add('show');return;}
+  g('empty').classList.remove('show');
+  g('carsGrid').innerHTML=cars.map(function(c,i){
+    return '<article class="car-card'+(c.feat&&S.brand!=='all'?' feat':'')+'" data-id="'+c.id+'" tabindex="0" style="animation-delay:'+(i*55)+'ms">'+
+      '<img class="cc-img" src="'+c.img+'" alt="'+c.name+'" loading="lazy" width="400" height="225"/>'+
+      '<div class="cc-badge">'+c.year+'</div>'+
+      '<div class="cc-body">'+
+        '<div class="cc-brand">'+c.brand+'</div>'+
+        '<div class="cc-name">'+c.name+'</div>'+
+        '<div class="cc-spec">'+
+          '<span class="spill"><b>'+c.specs['Potencia']+'</b></span>'+
+          '<span class="spill"><b>'+c.specs['0-100']+'</b> 0-100</span>'+
+        '</div>'+
+      '</div></article>';
+  }).join('');
+  g('carsGrid').querySelectorAll('.car-card').forEach(function(card){
+    function open(){openModal(parseInt(card.dataset.id,10));}
+    card.addEventListener('click',open);
+    card.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open();});
+  });
+}
+
+var sTmr;
+g('sInput').addEventListener('input',function(){
+  S.query=g('sInput').value.trim();
+  g('sClr').classList.toggle('show',S.query.length>0);
+  g('sanim').classList.add('on');
+  clearTimeout(sTmr);
+  sTmr=setTimeout(function(){g('sanim').classList.remove('on');renderCars();},350);
+});
+g('sClr').addEventListener('click',function(){
+  g('sInput').value='';S.query='';
+  g('sClr').classList.remove('show');g('sanim').classList.remove('on');renderCars();
+});
+
+function openModal(id){
+  var c=CARS.filter(function(x){return x.id===id;})[0];
+  if(!c)return;S.car=c;
+  g('mimg').src=c.img;g('mimg').alt=c.name;
+  g('mbbadge').textContent=c.brand;
+  g('myear').textContent=c.year;g('morig').textContent=c.origin;
+  g('mname').textContent=c.name;g('mdesc').textContent=c.desc;
+  g('mspecs').innerHTML=Object.keys(c.specs).map(function(l){
+    return '<div class="scard"><div class="scard-l">'+l+'</div><div class="scard-v">'+c.specs[l]+'</div></div>';
+  }).join('');
+  g('mtags').innerHTML=c.tags.map(function(t){return '<span class="tag">'+t+'</span>';}).join('');
+  g('modal').classList.add('open');document.body.style.overflow='hidden';
+  g('mclose').focus();
+}
+function closeModal(){g('modal').classList.remove('open');document.body.style.overflow='';S.car=null;}
+g('mclose').addEventListener('click',closeModal);
+g('mbdrop').addEventListener('click',closeModal);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&S.car)closeModal();});
+var ty=0;
+g('msheet').addEventListener('touchstart',function(e){ty=e.touches[0].clientY;},{passive:true});
+g('msheet').addEventListener('touchend',function(e){if(e.changedTouches[0].clientY-ty>80)closeModal();},{passive:true});
+
+document.querySelectorAll('.nbtn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var v=btn.dataset.view;
+    document.querySelectorAll('.nbtn').forEach(function(b){b.classList.toggle('active',b.dataset.view===v);});
+    document.querySelectorAll('.view').forEach(function(x){x.classList.toggle('active',x.id==='view-'+v);});
+    if(v==='camera')startCam();else stopCam();
+  });
+});
+
+var lastY=0;
+window.addEventListener('scroll',function(){
+  var y=window.scrollY;
+  g('header').classList.toggle('hide',y>lastY&&y>80);
+  lastY=y;
+},{passive:true});
+
+function startCam(){
+  g('camPhoto').style.display='none';
+  g('camVideo').style.display='block';
+  g('btnCapture').style.display='flex';
+  g('btnRetake').style.display='none';
+  g('camSt').textContent='Inicializando camera...';
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){
+    g('camSt').textContent='Camera nao disponivel neste navegador';return;
+  }
+  if(S.stream)S.stream.getTracks().forEach(function(t){t.stop();});
+  navigator.mediaDevices.getUserMedia({video:{facingMode:S.facing,width:{ideal:1920},height:{ideal:1080}},audio:false})
+  .then(function(stream){
+    S.stream=stream;
+    g('camVideo').srcObject=stream;
+    g('camVideo').play();
+    g('camSt').textContent=S.facing==='environment'?'Camera traseira ativa':'Camera frontal ativa';
+    showToast('Camera pronta!');
+  }).catch(function(err){
+    var m=err.name==='NotAllowedError'?'Permissao negada':err.name==='NotFoundError'?'Camera nao encontrada':'Camera indisponivel';
+    g('camSt').textContent=m;showToast(m);
+  });
+}
+function stopCam(){if(S.stream){S.stream.getTracks().forEach(function(t){t.stop();});S.stream=null;}}
+
+g('btnCapture').addEventListener('click',function(){
+  if(!S.stream)return;
+  var v=g('camVideo'),cv=g('camCanvas');
+  cv.width=v.videoWidth;cv.height=v.videoHeight;
+  cv.getContext('2d').drawImage(v,0,0);
+  g('camPhoto').src=cv.toDataURL('image/jpeg',.92);
+  g('camPhoto').style.display='block';
+  g('camVideo').style.display='none';
+  g('btnCapture').style.display='none';
+  g('btnRetake').style.display='flex';
+  g('camSt').textContent='Foto capturada!';
+  showToast('Foto capturada com sucesso!');
+  if(navigator.vibrate)navigator.vibrate([40,30,80]);
+});
+g('btnRetake').addEventListener('click',function(){
+  g('camPhoto').style.display='none';
+  g('camVideo').style.display='block';
+  g('btnCapture').style.display='flex';
+  g('btnRetake').style.display='none';
+  g('camSt').textContent='Pronto para fotografar';
+});
+g('btnFlip').addEventListener('click',function(){
+  S.facing=S.facing==='environment'?'user':'environment';startCam();
+});
+
+renderBrands();
+renderCars();
+
+setTimeout(function(){
+  var sp=g('splash');
+  if(!sp)return;
+  sp.classList.add('out');
+  setTimeout(function(){if(sp&&sp.parentNode)sp.parentNode.removeChild(sp);},520);
+},1600);
+
+if('serviceWorker' in navigator){
+  window.addEventListener('load',function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+
+</script>
 </body>
 </html>
