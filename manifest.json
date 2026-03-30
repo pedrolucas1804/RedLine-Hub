@@ -1,0 +1,51 @@
+{
+  "name": "RedLine Hub",
+  "short_name": "RedLine Hub",
+  "description": "Catálogo premium de supercarros das marcas mais exclusivas do mundo.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#080808",
+  "theme_color": "#0a0a0a",
+  "lang": "pt-BR",
+  "categories": ["lifestyle", "entertainment"],
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/0a0a0a/c8a96e?text=%E2%96%B2",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/0a0a0a/c8a96e?text=%E2%96%B2",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=390&h=844&fit=crop",
+      "sizes": "390x844",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Catálogo de Supercarros"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Catálogo",
+      "short_name": "Catálogo",
+      "description": "Ver todos os supercarros",
+      "url": "./index.html#catalog",
+      "icons": [{ "src": "https://via.placeholder.com/96/0a0a0a/c8a96e?text=%F0%9F%8F%8E", "sizes": "96x96" }]
+    },
+    {
+      "name": "Câmera",
+      "short_name": "Câmera",
+      "description": "Fotografar supercarros",
+      "url": "./index.html#camera",
+      "icons": [{ "src": "https://via.placeholder.com/96/0a0a0a/c8a96e?text=%F0%9F%93%B7", "sizes": "96x96" }]
+    }
+  ]
+}
